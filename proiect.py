@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
 
 # Define the MySQL database
-DATABASE_URL = "mssql+pyodbc://DESKTOP-V3CINPQ/proiect?driver=ODBC+Driver+17+for+SQL+Server&trusted_connection=yes"
+DATABASE_URL = 'mssql+pyodbc://DESKTOP-O6MHKP8/proiect?driver=ODBC+Driver+17+for+SQL+Server&trusted_connection=yes'
 engine = create_engine(DATABASE_URL)
 Base = declarative_base()
 
