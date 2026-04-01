@@ -157,11 +157,11 @@ class Application:
 def run_app():
     connection_string = (
         "Driver={ODBC Driver 17 for SQL Server};"
-        "Server=DESKTOP-O6MHKP8;"
-        "Database=proiect;"
+        "Server=DESKTOP-O6MHKP8;" #server
+        "Database=proiect;" #numee bazei de date
         "Trusted_Connection=yes;"
     )
-
+    
     # DATABASE_URL = 'mssql+pyodbc://DESKTOP-O6MHKP8/proiect?driver=ODBC+Driver+17+for+SQL+Server&trusted_connection=yes'
 
 

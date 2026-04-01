@@ -13,14 +13,18 @@ try:
 except Exception as e:
     print(f"Error connecting to database: {e}")
 
+
+#ORM:
+#= Object Relational Mapper — traduce între obiecte Python și tabele SQL.
+#ca sa nu mai scriem sql
+#spune cum arată tabela în baza de date. SQLAlchemy folosește asta ca să facă query-uri SQL
+
 class Identifier(Base):
     __tablename__ = 'Identifiers'
     
     identifier_name = Column(String(255), primary_key=True)
     description = Column(String(255))
     identifier_type = Column(String(255))
-
-#fscnknfck
 
 class Country(Base):
     __tablename__ = 'Countries'
@@ -87,4 +91,96 @@ class IdentifierCharacteristic(Base):
     master_name = Column(String(255), ForeignKey('Characteristics.master_name'), primary_key=True)
     characteristic_name = Column(String(255), ForeignKey('Characteristics.name'), primary_key=True)
     identifier = relationship('Identifier')
-    characteristic = relationship('Characteristic', primaryjoin="and_(IdentifierCharacteristic.master_name==Characteristic.master_name, 			IdentifierCharacteristic.characteristic_name==Characteristic.name)")            
+    characteristic = relationship('Characteristic', primaryjoin="and_(IdentifierCharacteristic.master_name==Characteristic.master_name, 			IdentifierCharacteristic.characteristic_name==Characteristic.name)")       
+
+#Session = conexiunea activă cu baza de date
+#ca sa putem face query-uri; 
+SessionLocal=sessionmaker(autocommit=False,autoflush=False, bind=engine)     
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+#pydantic
+#practic validari:
+
+from pydantic import BaseModel
+from typing import Optional
+from decimal import Decimal
+
+class IdentifierSchema(BaseModel):
+    identifier_name: str
+    description: Optional[str] = None
+    identifier_type: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+   
+class CountrySchema(BaseModel):
+    name: str
+    iso_code: Optional[str]=None
+    short_code: Optional[str]=None
+
+    class Config:
+        from_attributes = True
+
+class ConsumerUnitSchema(BaseModel):
+    number_of_consumers: int
+    country_name: str
+
+    class Config:
+        from_attributes = True
+
+class OwnershipSchema(BaseModel):
+    identifier_name: str
+    originator_first_name: Optional[str] = None
+    originator_last_name: Optional[str] = None
+    user_id_tnumber: str
+    user_id_intranet: Optional[str] = None
+    email: Optional[str] = None
+    owner_first_name: Optional[str] = None
+    owner_last_name: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+class RelationshipSchema(BaseModel):
+    from_identifier_name: str
+    to_identifier_name: str
+    relationship_name: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+class CharacteristicSchema(BaseModel):
+    master_name: str
+    name: str
+    specifics: Optional[str] = None
+    action_required: Optional[str] = None
+    report_type: Optional[str] = None
+    data_type: Optional[str] = None
+    lower_routine_release_limit: Optional[Decimal] = None
+    lower_limit: Optional[Decimal] = None
+    lower_target: Optional[Decimal] = None
+    target: Optional[Decimal] = None
+    upper_target: Optional[Decimal] = None
+    upper_limit: Optional[Decimal] = None
+    upper_routine_release_limit: Optional[Decimal] = None
+    test_frequency: Optional[int] = None
+    precision: Optional[int] = None
+    engineering_unit: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+class IdentifierCharacteristicSchema(BaseModel):
+    identifier_name: str
+    master_name: str
+    characteristic_name: str
+
+    class Config:
+        from_attributes = True
