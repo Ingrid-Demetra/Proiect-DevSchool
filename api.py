@@ -4,11 +4,20 @@ from sqlalchemy.orm import Session
 #import clasele
 from proiect import Country, CountrySchema, IdentifierSchema, engine, Identifier, Characteristic, IdentifierCharacteristic, get_db
 from proiect import IdentifierCreate,IdentifierUpdate, CountryCreate, CountryUpdate
+from fastapi.middleware.cors import CORSMiddleware
 # # import sesiunea DB
 # from proiect import SessionLocal
 
 
 app=FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # sau ["http://127.0.0.1:5500"] 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 #test
 # @app.get("/")
