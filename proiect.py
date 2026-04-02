@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DECIMAL
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
+from uvicorn import Config
 
 # Define the MySQL database
 DATABASE_URL = 'mssql+pyodbc://DESKTOP-O6MHKP8/proiect?driver=ODBC+Driver+17+for+SQL+Server&trusted_connection=yes'
@@ -119,8 +120,40 @@ class IdentifierSchema(BaseModel):
     class Config:
         from_attributes = True
 
-   
+class IdentifierCreate(BaseModel):
+    identifier_name: str
+    description: Optional[str] = None
+    identifier_type: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+
+class IdentifierUpdate(BaseModel):
+    identifier_name: Optional[str] = None
+    description: Optional[str] = None
+    identifier_type: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
 class CountrySchema(BaseModel):
+    name: str
+    iso_code: Optional[str]=None
+    short_code: Optional[str]=None
+
+    class Config:
+        from_attributes = True
+        
+class CountryCreate(BaseModel):
+    name: str
+    iso_code: Optional[str]=None
+    short_code: Optional[str]=None
+
+    class Config:
+        from_attributes = True
+
+class CountryUpdate(BaseModel):
     name: str
     iso_code: Optional[str]=None
     short_code: Optional[str]=None
